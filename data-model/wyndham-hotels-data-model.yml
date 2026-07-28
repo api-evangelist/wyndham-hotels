@@ -1,0 +1,279 @@
+generated: '2026-07-28'
+method: derived
+source: |
+  json-schema/wyndham-hotels-wp-v2-*.json (harvested by HTTP OPTIONS against
+  https://www.wyndhambusiness.com/wp-json/wp/v2/*) plus GET /wp/v2/types and
+  GET /wp/v2/taxonomies, 2026-07-28
+note: |
+  There is no hotel data model exposed by Wyndham Hotels & Resorts. This entity
+  graph is derived strictly from the resource schemas the WordPress REST API on
+  www.wyndhambusiness.com publishes, and it is a content-management model: posts,
+  pages, media attachments, taxonomy terms, users and site metadata. No property,
+  rate, availability, reservation, room-type, brand, loyalty-account or folio entity
+  exists anywhere in a machine-readable Wyndham surface. That absence is the
+  substantive finding — the entities a travel integrator actually wants live in
+  Sabre Hospitality's SynXis CRS, which Wyndham buys rather than publishes.
+rest_registered_types:
+- name: post
+  rest_base: posts
+  schema: json-schema/wyndham-hotels-wp-v2-posts.json
+  taxonomies:
+  - category
+  - post_tag
+  records_observed: 489
+  note: Wyndham Business news, hotel-opening and program articles.
+- name: page
+  rest_base: pages
+  schema: json-schema/wyndham-hotels-wp-v2-pages.json
+  taxonomies: []
+- name: attachment
+  rest_base: media
+  schema: json-schema/wyndham-hotels-wp-v2-media.json
+  note: Image and document corpus for the Wyndham Business site.
+- name: comment
+  rest_base: comments
+  schema: json-schema/wyndham-hotels-wp-v2-comments.json
+  note: Registered but returns an empty collection.
+- name: nav_menu_item
+  rest_base: menu-items
+  taxonomies:
+  - nav_menu
+- name: wp_block
+  rest_base: blocks
+  note: Registered but returns an empty collection.
+- name: wp_template
+  rest_base: templates
+- name: wp_template_part
+  rest_base: template-parts
+- name: wp_global_styles
+  rest_base: global-styles
+- name: wp_navigation
+  rest_base: navigation
+- name: wp_font_family
+  rest_base: font-families
+- name: wp_font_face
+  rest_base: font-families/{font_family_id}/font-faces
+travel_entities:
+  present: false
+  absent:
+  - property / hotel
+  - brand
+  - room type
+  - rate plan
+  - availability
+  - reservation / booking
+  - loyalty account (Wyndham Rewards)
+  - folio / invoice
+  - corporate account (Wyndham Direct)
+  note: |
+    None of these are registered with any Wyndham REST API. Hotel inventory reaches
+    buyers through Sabre SynXis, GDS chain codes under master chain WR, brand.com
+    and OTAs — none of which Wyndham exposes as a machine-readable contract.
+entities:
+- name: post
+  id_field: id
+  key_fields:
+  - id
+  - date
+  - date_gmt
+  - guid
+  - modified
+  - slug
+  - status
+  - type
+  - link
+  - title
+  - content
+  - excerpt
+  - author
+  - featured_media
+  - comment_status
+  - ping_status
+  - sticky
+  - template
+  - format
+  - meta
+  - categories
+  - tags
+- name: page
+  id_field: id
+  key_fields:
+  - id
+  - date
+  - slug
+  - status
+  - link
+  - title
+  - content
+  - excerpt
+  - author
+  - featured_media
+  - parent
+  - menu_order
+  - template
+  - meta
+- name: attachment
+  id_field: id
+  key_fields:
+  - id
+  - slug
+  - link
+  - title
+  - media_type
+  - mime_type
+  - source_url
+  - media_details
+  - alt_text
+  - caption
+  - description
+  - author
+  - post
+- name: category
+  id_field: id
+  key_fields:
+  - id
+  - name
+  - slug
+  - taxonomy
+  - parent
+  - description
+  - count
+  - link
+- name: tag
+  id_field: id
+  key_fields:
+  - id
+  - name
+  - slug
+  - taxonomy
+  - description
+  - count
+  - link
+- name: user
+  id_field: id
+  key_fields:
+  - id
+  - name
+  - url
+  - description
+  - link
+  - slug
+  - avatar_urls
+  note: Anonymously readable on this install; author names are exposed.
+- name: comment
+  id_field: id
+  key_fields:
+  - id
+  - post
+  - parent
+  - author
+  - author_name
+  - content
+  - status
+  - date
+  - type
+- name: type
+  id_field: slug
+  key_fields:
+  - name
+  - slug
+  - rest_base
+  - rest_namespace
+  - taxonomies
+  - supports
+  - visibility
+  - hierarchical
+- name: taxonomy
+  id_field: slug
+  key_fields:
+  - name
+  - slug
+  - rest_base
+  - types
+  - hierarchical
+  - visibility
+- name: status
+  id_field: slug
+  key_fields:
+  - name
+  - slug
+  - public
+  - private
+  - protected
+  - queryable
+- name: search-result
+  id_field: id
+  key_fields:
+  - id
+  - title
+  - url
+  - type
+  - subtype
+relationships:
+- from: post
+  to: category
+  kind: has_many
+  via: categories
+- from: post
+  to: tag
+  kind: has_many
+  via: tags
+- from: post
+  to: attachment
+  kind: has_one
+  via: featured_media
+- from: post
+  to: user
+  kind: belongs_to
+  via: author
+- from: page
+  to: page
+  kind: belongs_to
+  via: parent
+- from: page
+  to: attachment
+  kind: has_one
+  via: featured_media
+- from: page
+  to: user
+  kind: belongs_to
+  via: author
+- from: attachment
+  to: post
+  kind: belongs_to
+  via: post
+- from: attachment
+  to: user
+  kind: belongs_to
+  via: author
+- from: comment
+  to: post
+  kind: belongs_to
+  via: post
+- from: comment
+  to: comment
+  kind: belongs_to
+  via: parent
+- from: category
+  to: category
+  kind: belongs_to
+  via: parent
+- from: taxonomy
+  to: type
+  kind: has_many
+  via: types
+- from: type
+  to: taxonomy
+  kind: has_many
+  via: taxonomies
+second_estate:
+  host: https://development.wyndhamhotels.com
+  note: |
+    The franchise-development site runs the same WordPress core model with 403
+    registered routes across 17 namespaces, adding WPML translation namespaces
+    (wpml/v1, wpml/st/v1, wpml/tm/v1, wpml/ate/v1). Its entity graph is the same
+    content model and is not duplicated here; the raw discovery document is captured
+    at discovery/wyndham-hotels-development-wp-json-root.json.
+cross_references:
+  conventions: conventions/wyndham-hotels-conventions.yml
+  errors: errors/wyndham-hotels-problem-types.yml

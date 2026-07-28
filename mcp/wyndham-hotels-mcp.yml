@@ -1,0 +1,138 @@
+generated: '2026-07-28'
+method: searched
+source: |
+  https://www.wyndhambusiness.com/.well-known/oauth-protected-resource (HTTP 200,
+  RFC 9728), https://www.wyndhambusiness.com/wp-json/mcp (HTTP 200, route
+  discovery), and live JSON-RPC probes of both adapter endpoints, 2026-07-28
+status: gated
+note: |
+  Wyndham Hotels & Resorts does run MCP servers — three of them — and none is
+  documented, advertised or usable by a third party.
+
+  The substantive one is on www.wyndhambusiness.com, the corporate-travel program
+  site. It is a WordPress MCP adapter that has been wired to a full OAuth 2.1
+  authorization server: RFC 8414 authorization-server metadata and RFC 9728
+  protected-resource metadata both return 200 anonymously, the protected resource
+  names the MCP endpoint explicitly, PKCE S256 is required, public clients are
+  supported via client_id_metadata_document, and the single advertised scope is
+  `mcp`. An anonymous JSON-RPC tools/list returns 401 with a correct
+  WWW-Authenticate: Bearer challenge carrying resource_metadata — a
+  standards-correct MCP authorization handshake. No tool names, descriptions or
+  inputSchemas can be read without a credential Wyndham issues to nobody, and none
+  are published, so none are recorded here.
+
+  A second WordPress MCP adapter route (mcp-adapter-default-server) is registered on
+  the same site with no OAuth binding and returns 401 rest_forbidden.
+
+  A third adapter is registered on development.wyndhamhotels.com, the franchise
+  development site, also 401.
+
+  Separately, mcp.wyndhamhotels.com resolves with a valid certificate but serves an
+  Akamai 503 on every path — provisioned, never served.
+
+  No tool list is derived as a candidate: this provider publishes no OpenAPI to
+  derive one from, and inventing tools would be fabrication.
+servers:
+- name: wyndham-business-wordpress-mcp-oauth
+  transport: http
+  url: https://www.wyndhambusiness.com/wp-json/mcp/mcp-oauth-server
+  methods:
+  - POST
+  - GET
+  - DELETE
+  discovery_url: https://www.wyndhambusiness.com/wp-json/mcp
+  discovery_status: 200
+  implementation: WordPress MCP adapter (mcp namespace + wp-abilities/v1), WP Engine
+    hosting, Cloudflare edge
+  official: true
+  documented_by_provider: false
+  authorization:
+    scheme: OAuth 2.1 bearer
+    protected_resource_metadata: https://www.wyndhambusiness.com/.well-known/oauth-protected-resource
+    authorization_server: https://www.wyndhambusiness.com
+    authorization_server_metadata: https://www.wyndhambusiness.com/.well-known/oauth-authorization-server
+    authorization_endpoint: https://www.wyndhambusiness.com/oauth/authorize
+    token_endpoint: https://www.wyndhambusiness.com/oauth/token
+    revocation_endpoint: https://www.wyndhambusiness.com/oauth/revoke
+    grant_types_supported:
+    - authorization_code
+    - refresh_token
+    code_challenge_methods_supported:
+    - S256
+    token_endpoint_auth_methods_supported:
+    - none
+    client_id_metadata_document_supported: true
+    dynamic_client_registration: false
+    registration_endpoint: null
+    scopes_supported:
+    - mcp
+    bearer_methods_supported:
+    - header
+    www_authenticate_observed: 'Bearer realm="https://www.wyndhambusiness.com",
+      resource_metadata="https://www.wyndhambusiness.com/.well-known/oauth-protected-resource"'
+- name: wyndham-business-wordpress-mcp-default
+  transport: http
+  url: https://www.wyndhambusiness.com/wp-json/mcp/mcp-adapter-default-server
+  methods:
+  - POST
+  - GET
+  - DELETE
+  discovery_url: https://www.wyndhambusiness.com/wp-json/mcp
+  discovery_status: 200
+  official: true
+  documented_by_provider: false
+  authorization:
+    scheme: WordPress cookie + X-WP-Nonce or application password
+    oauth: false
+- name: wyndham-development-wordpress-mcp-default
+  transport: http
+  url: https://development.wyndhamhotels.com/wp-json/mcp/mcp-adapter-default-server
+  methods:
+  - POST
+  - GET
+  - DELETE
+  discovery_url: https://development.wyndhamhotels.com/wp-json/mcp
+  discovery_status: 200
+  official: true
+  documented_by_provider: false
+  authorization:
+    scheme: WordPress cookie + X-WP-Nonce or application password
+    oauth: false
+    well_known_oauth_authorization_server: 404
+probes:
+- request: POST https://www.wyndhambusiness.com/wp-json/mcp/mcp-oauth-server {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+  accept: application/json, text/event-stream
+  status: 401
+  body: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+  www_authenticate: Bearer realm="https://www.wyndhambusiness.com", resource_metadata="https://www.wyndhambusiness.com/.well-known/oauth-protected-resource"
+- request: POST https://www.wyndhambusiness.com/wp-json/mcp/mcp-adapter-default-server {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+  status: 401
+  body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+- request: GET https://www.wyndhambusiness.com/wp-json/wp-abilities/v1/abilities
+  status: 401
+  body: '{"code":"rest_forbidden","message":"Sorry, you are not allowed to do that.","data":{"status":401}}'
+  note: The wp-abilities registry is what the MCP adapter exposes as tools; it is
+    gated by the same credential.
+- request: GET https://www.wyndhambusiness.com/wp-json/mcp
+  status: 200
+  note: Returns the namespace route table listing both adapter endpoints.
+- request: GET https://development.wyndhamhotels.com/wp-json/mcp
+  status: 200
+  note: Second estate; lists /mcp/mcp-adapter-default-server.
+- request: GET https://development.wyndhamhotels.com/wp-json/wp-abilities/v1/abilities
+  status: 401
+- request: POST https://mcp.wyndhamhotels.com/mcp {"jsonrpc":"2.0","id":1,"method":"tools/list"}
+  status: 503
+  body: Akamai edgesuite error page (HTML)
+  note: Host resolves, TLS valid to 2026-12-10, no content served on any path.
+tools: []
+tools_note: |
+  Auth-gated. The tool set of a WordPress MCP adapter is the site's registered
+  wp-abilities, and /wp-json/wp-abilities/v1/abilities returns 401 on both estates.
+  No names, descriptions or inputSchemas are readable and none are documented, so
+  none are recorded and no candidate list is derived.
+cross_references:
+  authentication: authentication/wyndham-hotels-authentication.yml
+  scopes: scopes/wyndham-hotels-scopes.yml
+  well_known: well-known/wyndham-hotels-well-known.yml
+  discovery: discovery/wyndham-hotels-wyndhambusiness-wp-json-root.json

@@ -1,0 +1,47 @@
+generated: '2026-07-28'
+method: searched
+source: https://www.wyndhambusiness.com/.well-known/oauth-authorization-server (RFC
+  8414) and https://www.wyndhambusiness.com/.well-known/oauth-protected-resource
+  (RFC 9728), fetched 2026-07-28
+docs: null
+note: |
+  The only OAuth surface anywhere on the Wyndham Hotels & Resorts estate is the
+  authorization server bound to the WordPress MCP server on www.wyndhambusiness.com.
+  Its published metadata advertises exactly one scope — `mcp` — on both the
+  authorization server and the protected resource. There is no scopes or
+  permissions reference page on any Wyndham property, no per-resource or
+  per-operation scope decomposition, and no client-credentials surface, so this
+  records the full and minimal real catalogue rather than a curated one. Nothing is
+  inferred: a coarse single-scope catalogue is what the provider actually publishes.
+schemes:
+- name: wyndham-business-mcp-oauth
+  type: oauth2
+  source: well-known/wyndham-hotels-wyndhambusiness-oauth-authorization-server.json
+  issuer: https://www.wyndhambusiness.com
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://www.wyndhambusiness.com/oauth/authorize
+    tokenUrl: https://www.wyndhambusiness.com/oauth/token
+    pkce: S256 (required)
+scopes:
+- scope: mcp
+  description: |
+    Bearer-token access to the WordPress MCP server at
+    https://www.wyndhambusiness.com/wp-json/mcp/mcp-oauth-server. It is a single
+    coarse capability scope covering the whole MCP surface — the underlying tool set
+    (the site's registered wp-abilities) is itself gated and unreadable, so the
+    effective permissions this scope confers cannot be enumerated from public data.
+  flows:
+  - authorizationCode
+  sources:
+  - well-known/wyndham-hotels-wyndhambusiness-oauth-authorization-server.json
+  - well-known/wyndham-hotels-wyndhambusiness-oauth-protected-resource.json
+coverage:
+  scope_count: 1
+  data_scopes: 0
+  client_credentials_scopes: 0
+  read_write_split: false
+cross_references:
+  authentication: authentication/wyndham-hotels-authentication.yml
+  mcp: mcp/wyndham-hotels-mcp.yml
+  well_known: well-known/wyndham-hotels-well-known.yml

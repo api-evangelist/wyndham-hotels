@@ -1,0 +1,85 @@
+generated: '2026-07-28'
+method: probed
+source: live DNS/TLS/HTTP probes of every Wyndham host named in apis.yml, review.yml
+  and the harvested discovery documents
+hosts:
+- host: www.wyndhamhotels.com
+  https: true
+  tls_version: TLSv1.2
+  cert_expires: Jan 24 23:59:59 2027 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  edge: Akamai
+- host: corporate.wyndhamhotels.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 13 15:40:32 2026 GMT
+  hsts: false
+- host: development.wyndhamhotels.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 13 22:56:31 2026 GMT
+  hsts: false
+  note: WordPress on WP Engine; anonymous WordPress REST API and a gated MCP adapter.
+- host: investor.wyndhamhotels.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 12 08:02:03 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: mcp.wyndhamhotels.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Dec 10 23:59:59 2026 GMT
+  hsts: null
+  note: Provisioned behind Akamai; every path returns 503 with no HSTS header.
+- host: aisearch.wyndhamhotels.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Dec 10 23:59:59 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+- host: connect.wyndhamhotels.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 19 03:31:55 2026 GMT
+  hsts: true
+  hsts_max_age: 31536000
+  note: Returns HTTP 204 with an empty body on every path.
+- host: www.wyndhambusiness.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 18 21:51:59 2026 GMT
+  hsts: false
+  edge: Cloudflare (WP Engine origin)
+  note: |
+    Carries the only live, machine-readable API surfaces on the estate — an
+    anonymous WordPress REST API and an OAuth 2.1 protected MCP server — and is one
+    of the hosts with no HSTS.
+domains:
+- domain: wyndhamhotels.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: wyndhambusiness.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: quarantine
+findings:
+  no_caa: |
+    Neither registrable domain publishes a CAA record, so no certificate authority is
+    pinned for either estate.
+  no_dnssec: Neither domain is DNSSEC-signed.
+  hsts_gaps:
+  - corporate.wyndhamhotels.com
+  - development.wyndhamhotels.com
+  - www.wyndhambusiness.com
+  tls_note: |
+    www.wyndhamhotels.com negotiates TLS 1.2 while every other host negotiates
+    TLS 1.3.
+  dmarc_note: |
+    wyndhamhotels.com enforces p=reject; wyndhambusiness.com only p=quarantine.

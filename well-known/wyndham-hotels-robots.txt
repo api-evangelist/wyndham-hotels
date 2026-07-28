@@ -1,0 +1,37 @@
+########################################################
+#
+#    wyndhamhotels.com Robots File
+#    Last Updated on November 7, 2025
+#
+########################################################
+
+User-agent: Bingbot
+Allow: /bin/
+Allow: /BWSServices/
+
+User-agent: *
+Disallow: /reservation*/
+Disallow: /*test-
+Disallow: /*blueprint
+Disallow: /bin/
+Disallow: /BWSServices/
+Disallow: /hotels/
+Disallow: /Cy6o9WtgNx.txt
+Disallow: /*hotels/
+Disallow: /*search-results
+Disallow: /*rcrc
+Disallow: /*rcea
+Disallow: /*join-thanku
+Disallow: /*myedge
+Disallow: /*arise-suites
+
+User-agent: Google-HotelAdsVerifier/2.0
+Allow: /
+
+User-agent: Google-HotelAdsVerifier
+Allow: /
+
+User-agent: AdIdxBot
+Allow: /
+
+Sitemap: https://www.wyndhamhotels.com/sitemap.xml

@@ -23,11 +23,19 @@ Wyndham Hotels & Resorts, Inc. (NYSE: WH) is the world's largest hotel franchisi
 
 ## APIs
 
-No APIs are documented for Wyndham Hotels & Resorts.
+**No APIs are documented for Wyndham Hotels & Resorts** — but three undocumented, live machine-readable surfaces were found and are catalogued honestly:
 
-The `developer.`, `developers.`, `docs.` and `api.` subdomains of `wyndhamhotels.com` do not resolve. `/developers`, `/api`, `/docs`, `/openapi.json`, `/swagger.json`, `/api-docs` and `/.well-known/` all return 404. An `mcp.wyndhamhotels.com` host exists in certificate transparency and resolves, but every path returns an Akamai 503 with no served content and no documentation — it is recorded as an observation in `review.yml`, not catalogued as an API.
+- **Wyndham Business WordPress REST API** — `https://www.wyndhambusiness.com/wp-json/wp/v2` — anonymous, 309 registered routes across 12 namespaces, JSON Schema available by HTTP OPTIONS. Incidental CMS infrastructure, not a product.
+- **Wyndham Business WordPress MCP Server (OAuth-gated)** — `https://www.wyndhambusiness.com/wp-json/mcp/mcp-oauth-server` — a real OAuth 2.1 protected resource with RFC 8414 and RFC 9728 discovery metadata, PKCE S256 and a single `mcp` scope. Anonymous `tools/list` returns 401 with a standards-correct bearer challenge; no tool list is readable and no client registration path is published.
+- **Wyndham Hotel Development WordPress REST API** — `https://development.wyndhamhotels.com/wp-json/wp/v2` — anonymous, 403 routes across 17 namespaces, plus a third (non-OAuth) MCP adapter that returns 401.
 
-The programmable interface to Wyndham inventory belongs to Sabre Hospitality, whose SynXis Central Reservation System Wyndham buys, not to Wyndham. See `review.yml` for the full probe log and the switching-cost analysis.
+None of these carries hotel data. There is no property, rate, availability, reservation, loyalty or folio entity in any machine-readable Wyndham surface, and no OpenAPI, AsyncAPI, GraphQL, webhook or SDK anywhere.
+
+The `developer.`, `developers.`, `docs.` and `api.` subdomains of `wyndhamhotels.com` do not resolve. `/developers`, `/api`, `/docs`, `/openapi.json`, `/swagger.json`, `/api-docs` and `/.well-known/` all return 404 on the consumer estate. An `mcp.wyndhamhotels.com` host exists in certificate transparency and resolves, but every path returns an Akamai 503 with no served content and no documentation — it is recorded as an observation in `review.yml`, not catalogued as an API.
+
+Wyndham's stated posture and its deployed posture disagree: the Terms of Use effective 2026-03-12 prohibit robots, spiders, intelligent agents and meta-searching outright, while three MCP adapters run on the estate.
+
+The programmable interface to Wyndham inventory belongs to Sabre Hospitality, whose SynXis Central Reservation System Wyndham buys, not to Wyndham. See `review.yml` for the full probe log, the round-two correction, and the switching-cost analysis.
 
 ## Switching Cost
 

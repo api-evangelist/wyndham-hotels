@@ -1,0 +1,79 @@
+generated: '2026-07-28'
+method: searched
+source: live probes of the Wyndham Hotels & Resorts estate, 2026-07-28
+note: |
+  Wyndham Hotels & Resorts publishes no API lifecycle commitments of any kind. There
+  is no developer changelog, no deprecation policy, no sunset-header contract, no
+  SLA and no status page — consistent with a company that runs no API program even
+  though live API surfaces exist on its estate. The only versioning present is the
+  WordPress core REST namespace on the two incidental CMS surfaces, which Wyndham
+  neither controls nor documents.
+versioning:
+  scheme: uri-path namespace
+  current: wp/v2
+  provider_policy: null
+  docs: https://developer.wordpress.org/rest-api/
+  note: Inherited from WordPress core and its plugins, not a Wyndham versioning
+    commitment.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: No RFC 8594 Sunset or Deprecation header was returned on any probe and no
+    deprecation policy page exists. No Deprecation pointer is emitted.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  exists: false
+  probes:
+  - url: https://status.wyndhamhotels.com/
+    status: 0
+    note: DNS does not resolve.
+  note: No StatusPage pointer is emitted.
+changelog:
+  url: null
+  exists: false
+  note: |
+    The corporate newsroom (https://corporate.wyndhamhotels.com/news-media/) and the
+    Wyndham Business news page are organisational newsrooms, not API changelogs.
+    They are wired as Blog, not as ChangeLog.
+support:
+  url: https://www.wyndhamhotels.com/contact-us
+  note: |
+    General customer-care contact routes and a 1-800 reservations line. There is no
+    developer support channel, no partner support desk published publicly, and no
+    ticketing surface.
+deprecated_operations: []
+terms_lifecycle:
+  note: |
+    Where Wyndham does version something publicly it is documents, not interfaces.
+    Both governing documents carry effective dates and are revised in place.
+  terms_of_use:
+    url: https://www.wyndhamhotels.com/about-us/terms-of-use-more-info
+    effective: '2026-03-12'
+  privacy_notice:
+    url: https://www.wyndhamhotels.com/about-us/privacy-notice-more-info
+    effective: '2026-07-20'
+  robots_txt:
+    url: https://www.wyndhamhotels.com/robots.txt
+    last_updated: '2025-11-07'
+    captured: well-known/wyndham-hotels-robots.txt
+  llms_txt:
+    url: https://www.wyndhamhotels.com/llms.txt
+    last_updated: March 2026 (stated in the document footer)
+    captured: llms/wyndham-hotels-llms.txt
+recheck_triggers:
+- The www.wyndhambusiness.com MCP server publishes a client registration path or any
+  documentation, making its `mcp` scope obtainable by a third party.
+- mcp.wyndhamhotels.com begins serving content instead of an Akamai 503.
+- Any developer/developers/docs/api subdomain of wyndhamhotels.com begins to resolve.
+- An OpenAPI, AsyncAPI or webhook surface appears on any Wyndham host.
+- Wyndham publishes GDS/connectivity documentation for distributors directly rather
+  than via marketing PDFs.
+cross_references:
+  conventions: conventions/wyndham-hotels-conventions.yml
+  conformance: conformance/wyndham-hotels-conformance.yml

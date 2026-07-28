@@ -1,0 +1,85 @@
+generated: '2026-07-28'
+method: searched
+source: live error responses observed on https://www.wyndhambusiness.com/wp-json/
+  and https://www.wyndhambusiness.com/wp-json/mcp/, 2026-07-28
+format: wordpress-rest-error
+note: |
+  Wyndham publishes no error reference. This catalogue is the set of error envelopes
+  actually returned by the anonymously reachable surfaces on the Wyndham estate,
+  each captured from a live probe. The envelope is the WordPress REST convention —
+  a JSON object with code, message and data — not RFC 9457 application/problem+json;
+  the content-type on error responses is application/json. The MCP route adds its
+  own code (mcp_unauthorized) inside the same envelope and pairs it with a correct
+  RFC 9728 WWW-Authenticate challenge.
+envelope:
+  content_type: application/json; charset=UTF-8
+  shape:
+    code: machine-readable error slug
+    message: human-readable message
+    data.status: HTTP status code, repeated in the body
+    data.params: per-parameter messages (validation errors only)
+    data.details: per-parameter nested error objects (validation errors only)
+  rfc9457: false
+problems:
+- status: 404
+  code: rest_no_route
+  title: No route was found matching the URL and request method.
+  observed_at: GET https://www.wyndhambusiness.com/wp-json/wp/v2/nonexistent
+  remediation: Check the route against the discovery document at /wp-json/ (captured
+    at discovery/wyndham-hotels-wyndhambusiness-wp-json-root.json).
+- status: 404
+  code: rest_post_invalid_id
+  title: Invalid post ID.
+  observed_at: GET https://www.wyndhambusiness.com/wp-json/wp/v2/posts/99999999
+  remediation: Enumerate valid ids from the collection endpoint first.
+- status: 404
+  code: rest_user_invalid_id
+  title: Invalid user ID.
+  observed_at: GET https://www.wyndhambusiness.com/wp-json/wp/v2/users/1
+  remediation: The users collection is anonymously readable on this install; read ids
+    from GET /wp/v2/users.
+- status: 400
+  code: rest_invalid_param
+  title: 'Invalid parameter(s): per_page'
+  observed_at: GET https://www.wyndhambusiness.com/wp-json/wp/v2/posts?per_page=999
+  detail_code: rest_out_of_bounds
+  detail_message: per_page must be between 1 (inclusive) and 100 (inclusive)
+  remediation: Keep per_page within 1-100 and paginate with the page parameter.
+- status: 401
+  code: rest_forbidden
+  title: Sorry, you are not allowed to do that.
+  observed_at: |
+    GET /wp-json/wp/v2/settings,
+    GET /wp-json/wp-abilities/v1/abilities, and
+    POST /wp-json/mcp/mcp-adapter-default-server (JSON-RPC tools/list)
+  remediation: |
+    These surfaces exist on the estate but are gated to authenticated WordPress
+    users; there is no public credential path.
+- status: 401
+  code: mcp_unauthorized
+  title: MCP authentication required.
+  observed_at: POST https://www.wyndhambusiness.com/wp-json/mcp/mcp-oauth-server
+    (JSON-RPC tools/list)
+  www_authenticate: Bearer realm="https://www.wyndhambusiness.com", resource_metadata="https://www.wyndhambusiness.com/.well-known/oauth-protected-resource"
+  remediation: |
+    Obtain a bearer token with the `mcp` scope from the authorization server at
+    https://www.wyndhambusiness.com/oauth/authorize using PKCE S256. No client
+    registration path is published, so in practice this is unobtainable by a third
+    party.
+- status: 503
+  code: null
+  title: Akamai edgesuite error page (HTML, not JSON)
+  observed_at: every path on https://mcp.wyndhamhotels.com/
+  remediation: None. The host is provisioned but serves no content; this is
+    infrastructure, not an API error contract.
+- status: 500
+  code: null
+  title: WordPress feed route error
+  observed_at: |
+    GET https://www.wyndhambusiness.com/feed/ and
+    GET https://development.wyndhamhotels.com/feed/
+  remediation: None available; there is no working RSS syndication surface.
+cross_references:
+  conventions: conventions/wyndham-hotels-conventions.yml
+  authentication: authentication/wyndham-hotels-authentication.yml
+  mcp: mcp/wyndham-hotels-mcp.yml

@@ -16,18 +16,27 @@ description: >-
   brand.com sites and Wyndham Rewards, through GDS chain codes under master
   chain code WR, and through third-party online travel agents, with the
   central reservation layer supplied by Sabre Hospitality's SynXis CRS under a
-  relationship Sabre publicly renewed in July 2024. Its API posture is honest
-  and thin: as of 2026-07-28 no developer portal, no API documentation, no
-  OpenAPI or other machine-readable contract, and no public API terms were
-  found on wyndhamhotels.com or any probed subdomain. developer., developers.,
-  docs. and api. subdomains do not resolve; /developers, /api, /docs,
-  /openapi.json, /swagger.json and /api-docs all return 404. An
-  mcp.wyndhamhotels.com host exists in certificate transparency and resolves
-  but returns an Akamai 503 with no served content and no documentation. The
-  published Terms of Use (effective 2026-03-12) affirmatively prohibit robots,
-  spiders, meta-searching and other automated access, and separately prohibit
-  automated access to Wyndham's AI Search. This is a no-public-API, no-exit-path
-  provider whose integration surface is reached only through a franchise
+  relationship Sabre publicly renewed in July 2024. There is no travel API:
+  no developer portal, no API documentation, no OpenAPI, and no property,
+  rate, availability, reservation, loyalty or folio surface is machine-readable
+  anywhere. developer., developers., docs. and api. subdomains do not resolve;
+  /developers, /api, /docs, /openapi.json, /swagger.json and /api-docs all
+  return 404, and mcp.wyndhamhotels.com resolves with a valid certificate but
+  serves an Akamai 503 on every path. The Terms of Use (effective 2026-03-12)
+  affirmatively prohibit robots, spiders, meta-searching and automated access,
+  and separately prohibit automated access to Wyndham's AI Search. What a
+  second enrichment round did find on 2026-07-28 is undocumented CMS
+  infrastructure that is nonetheless genuinely live: www.wyndhambusiness.com
+  and development.wyndhamhotels.com both run WordPress on WP Engine and leave
+  the WordPress REST API anonymously readable (309 and 403 registered routes,
+  with JSON Schema available by HTTP OPTIONS), and three WordPress MCP adapter
+  routes are registered across the two estates — one of them, on
+  www.wyndhambusiness.com, bound to a real OAuth 2.1 authorization server with
+  RFC 8414 and RFC 9728 discovery metadata, mandatory PKCE S256 and a single
+  `mcp` scope, returning a standards-correct 401 bearer challenge to anonymous
+  callers. None of it is documented, supported, or usable without a credential
+  Wyndham issues to no third party, and none of it carries hotel data. The
+  integration surface that matters is still reached only through a franchise
   agreement, a commercial distribution agreement, or Sabre.
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/wyndham-hotels.png
 url: https://raw.githubusercontent.com/api-evangelist/wyndham-hotels/refs/heads/main/apis.yml
@@ -44,8 +53,178 @@ tags:
 created: '2026-07-28'
 modified: '2026-07-28'
 specificationVersion: '0.19'
-apis: []
+apis:
+  - aid: wyndham-hotels:wyndham-business-wordpress-rest-api
+    name: Wyndham Business WordPress REST API
+    description: >-
+      www.wyndhambusiness.com — the Wyndham Business corporate-travel program
+      site — runs WordPress on WP Engine behind Cloudflare and leaves the
+      standard WordPress REST API anonymously readable at /wp-json/. The live
+      route-discovery document advertises 309 routes across 12 namespaces, and
+      anonymous HTTP 200 was verified on posts (489 records), pages, media,
+      categories, tags, users, types, taxonomies, statuses, comments, blocks and
+      search. HTTP OPTIONS on each collection returns a JSON Schema, eleven of
+      which are harvested into json-schema/. Page-number pagination with
+      X-WP-Total / X-WP-TotalPages and RFC 8288 Link headers; errors use the
+      WordPress {code,message,data.status} envelope rather than RFC 9457. This is
+      incidental CMS infrastructure, not a Wyndham API product — Wyndham
+      documents, supports and issues keys for nothing, and the surface carries no
+      property, rate, availability, reservation, loyalty or folio data. Settings
+      and the wp-abilities registry return 401.
+    humanURL: https://www.wyndhambusiness.com/
+    baseURL: https://www.wyndhambusiness.com/wp-json/wp/v2
+    tags:
+      - Content
+      - WordPress
+      - REST
+      - JSON
+      - Business Travel
+    properties:
+      - type: Documentation
+        url: https://developer.wordpress.org/rest-api/
+      - type: APIReference
+        url: https://developer.wordpress.org/rest-api/reference/
+      - type: Discovery
+        url: https://www.wyndhambusiness.com/wp-json/
+      - type: DiscoveryDocument
+        url: discovery/wyndham-hotels-wyndhambusiness-wp-json-root.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-posts.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-pages.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-media.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-categories.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-tags.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-users.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-types.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-taxonomies.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-statuses.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-comments.json
+      - type: JSONSchema
+        url: json-schema/wyndham-hotels-wp-v2-search.json
+      - type: Conventions
+        url: conventions/wyndham-hotels-conventions.yml
+      - type: ErrorCatalog
+        url: errors/wyndham-hotels-problem-types.yml
+      - type: DataModel
+        url: data-model/wyndham-hotels-data-model.yml
+      - type: Authentication
+        url: authentication/wyndham-hotels-authentication.yml
+  - aid: wyndham-hotels:wyndham-business-mcp-server
+    name: Wyndham Business WordPress MCP Server (OAuth-gated)
+    description: >-
+      A WordPress MCP adapter is registered on www.wyndhambusiness.com in the
+      `mcp` namespace alongside wp-abilities/v1, and — unlike most WordPress MCP
+      installs — it is bound to a working OAuth 2.1 authorization server.
+      /.well-known/oauth-authorization-server (RFC 8414) and
+      /.well-known/oauth-protected-resource (RFC 9728) both return HTTP 200
+      anonymously; the protected resource names the MCP endpoint explicitly, PKCE
+      S256 is the only code-challenge method, the token endpoint accepts no
+      client authentication, client_id_metadata_document_supported is true, and
+      the single advertised scope is `mcp`. An anonymous JSON-RPC tools/list
+      returns 401 mcp_unauthorized with a correct WWW-Authenticate bearer
+      challenge carrying resource_metadata. The surface genuinely exists and is
+      genuinely not publicly usable — no tool names, descriptions or input
+      schemas can be read without a credential Wyndham issues to no third party,
+      and no registration endpoint is published. Recorded as a gated surface
+      rather than a product.
+    humanURL: https://www.wyndhambusiness.com/wp-json/mcp
+    baseURL: https://www.wyndhambusiness.com/wp-json/mcp/mcp-oauth-server
+    tags:
+      - MCP
+      - Agents
+      - WordPress
+      - OAuth
+      - Gated
+    properties:
+      - type: MCPServer
+        url: mcp/wyndham-hotels-mcp.yml
+      - type: Discovery
+        url: https://www.wyndhambusiness.com/wp-json/mcp
+      - type: Authentication
+        url: authentication/wyndham-hotels-authentication.yml
+      - type: OAuthScopes
+        url: scopes/wyndham-hotels-scopes.yml
+      - type: WellKnown
+        url: well-known/wyndham-hotels-well-known.yml
+  - aid: wyndham-hotels:development-wordpress-rest-api
+    name: Wyndham Hotel Development WordPress REST API
+    description: >-
+      development.wyndhamhotels.com — the franchise-development site — runs the
+      same WordPress/WP Engine stack and likewise leaves the WordPress REST API
+      anonymously readable at /wp-json/, advertising 403 routes across 17
+      namespaces including the WPML translation namespaces (wpml/v1, wpml/st/v1,
+      wpml/tm/v1, wpml/ate/v1). Anonymous HTTP 200 verified on posts, pages,
+      media, users and types. A second WordPress MCP adapter route is registered
+      here in the `mcp` namespace with no OAuth binding; JSON-RPC calls and the
+      wp-abilities registry both return 401, and /.well-known/oauth-authorization-server
+      returns 404. Incidental CMS infrastructure with franchise-marketing content
+      only — no franchise, property or development data model is exposed.
+    humanURL: https://development.wyndhamhotels.com/
+    baseURL: https://development.wyndhamhotels.com/wp-json/wp/v2
+    tags:
+      - Content
+      - WordPress
+      - REST
+      - JSON
+      - Franchising
+    properties:
+      - type: Documentation
+        url: https://developer.wordpress.org/rest-api/
+      - type: APIReference
+        url: https://developer.wordpress.org/rest-api/reference/
+      - type: Discovery
+        url: https://development.wyndhamhotels.com/wp-json/
+      - type: DiscoveryDocument
+        url: discovery/wyndham-hotels-development-wp-json-root.json
+      - type: Conventions
+        url: conventions/wyndham-hotels-conventions.yml
+      - type: ErrorCatalog
+        url: errors/wyndham-hotels-problem-types.yml
 common:
+  - type: DomainSecurity
+    url: security/wyndham-hotels-domain-security.yml
+  - type: Authentication
+    url: authentication/wyndham-hotels-authentication.yml
+  - type: OAuthScopes
+    url: scopes/wyndham-hotels-scopes.yml
+  - type: WellKnown
+    url: well-known/wyndham-hotels-well-known.yml
+  - type: MCPServer
+    url: mcp/wyndham-hotels-mcp.yml
+  - type: Conventions
+    url: conventions/wyndham-hotels-conventions.yml
+  - type: ErrorCatalog
+    url: errors/wyndham-hotels-problem-types.yml
+  - type: DataModel
+    url: data-model/wyndham-hotels-data-model.yml
+  - type: Conformance
+    url: conformance/wyndham-hotels-conformance.yml
+  - type: Lifecycle
+    url: lifecycle/wyndham-hotels-lifecycle.yml
+  - type: DiscoveryDocument
+    name: Wyndham Business WordPress REST route index
+    url: discovery/wyndham-hotels-wyndhambusiness-wp-json-root.json
+  - type: DiscoveryDocument
+    name: Wyndham Hotel Development WordPress REST route index
+    url: discovery/wyndham-hotels-development-wp-json-root.json
+  - type: LLMsTxt
+    name: wyndhamhotels.com llms.txt (harvested)
+    url: llms/wyndham-hotels-llms.txt
+  - type: LLMsTxt
+    name: wyndhambusiness.com llms.txt (harvested)
+    url: llms/wyndham-hotels-wyndhambusiness-llms.txt
+  - type: LLMsTxt
+    name: development.wyndhamhotels.com llms.txt (harvested)
+    url: llms/wyndham-hotels-development-llms.txt
   - type: Website
     url: https://www.wyndhamhotels.com/
   - type: CorporateWebsite
@@ -58,6 +237,15 @@ common:
     url: https://www.wyndhamhotels.com/about-us/terms-of-use-more-info
   - type: PrivacyPolicy
     url: https://www.wyndhamhotels.com/about-us/privacy-notice-more-info
+  - type: Support
+    name: Wyndham Customer Care
+    url: https://www.wyndhamhotels.com/contact-us
+    description: >-
+      Consumer customer-care contact routes and a reservations phone line. There
+      is no developer support channel and no partner support desk published.
+  - type: Blog
+    name: Wyndham Newsroom
+    url: https://corporate.wyndhamhotels.com/news-media/
   - type: LLMSTxt
     url: https://www.wyndhamhotels.com/llms.txt
   - type: Robots
@@ -94,6 +282,7 @@ common:
     description: >-
       Corporate travel program, including Wyndham Direct centralized booking
       and billing. Approval-gated; no API or booking-tool integration published.
+      Also the host of the only live machine-readable surfaces on the estate.
   - type: Loyalty
     name: Wyndham Rewards
     url: https://www.wyndhamhotels.com/wyndham-rewards

@@ -1,0 +1,189 @@
+generated: '2026-07-28'
+method: searched
+source: live probes of every Wyndham Hotels & Resorts host in apis.yml, 2026-07-28
+note: |
+  The consumer estate (wyndhamhotels.com and its subdomains) publishes no
+  /.well-known/ discovery surface at all — every RFC-defined path returns 404, or
+  an infrastructure status code that is not a document (503 from the Akamai-fronted
+  mcp host, 403 from the WAF in front of aisearch, 204 from connect).
+
+  The one real /.well-known/ surface on the Wyndham estate is on
+  www.wyndhambusiness.com, the corporate-travel program site. It serves an RFC 8414
+  OAuth 2.0 Authorization Server Metadata document and an RFC 9728 OAuth 2.0
+  Protected Resource Metadata document, both HTTP 200 anonymously, both pointing at
+  a WordPress MCP server route. Both are captured verbatim here. This is the first
+  machine-readable authorization contract found anywhere on Wyndham's public
+  properties and it was missed by the 2026-07-28 round-one review, which recorded
+  wyndhambusiness.com only as "WAF blocks scripted clients" after probing HTML
+  pages rather than the JSON surface.
+hosts:
+- host: https://www.wyndhamhotels.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    file: ../llms/wyndham-hotels-llms.txt
+    note: Not a /.well-known/ path, but the only AI-facing document on the consumer
+      host. Captured verbatim in llms/.
+  - path: /robots.txt
+    status: 200
+    file: wyndham-hotels-robots.txt
+    note: Captured verbatim; last updated November 7, 2025. Disallows /bin/ and
+      /BWSServices/ for all agents except Bingbot, plus /reservation*/, /hotels/
+      and /*search-results. Explicitly allows Google-HotelAdsVerifier and AdIdxBot.
+- host: https://www.wyndhambusiness.com
+  role: Wyndham Business corporate-travel program site (WordPress on WP Engine,
+    fronted by Cloudflare)
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    redirect: 301 to /.well-known/oauth-authorization-server/
+    file: wyndham-hotels-wyndhambusiness-oauth-authorization-server.json
+    content_type: application/json; charset=UTF-8
+    spec: RFC 8414
+    issuer: https://www.wyndhambusiness.com
+    scopes_supported:
+    - mcp
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    redirect: 301 to /.well-known/oauth-protected-resource/
+    file: wyndham-hotels-wyndhambusiness-oauth-protected-resource.json
+    content_type: application/json; charset=UTF-8
+    spec: RFC 9728
+    resource: https://www.wyndhambusiness.com/wp-json/mcp/mcp-oauth-server
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/mcp.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    file: ../llms/wyndham-hotels-wyndhambusiness-llms.txt
+    note: All in One SEO generated page index.
+  - path: /robots.txt
+    status: 200
+  - path: /sitemap.xml
+    status: 200
+  - path: /feed/
+    status: 500
+    note: The WordPress RSS feed route errors; there is no working syndication feed.
+- host: https://development.wyndhamhotels.com
+  role: franchise-development site (WordPress on WP Engine)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /llms.txt
+    status: 200
+    file: ../llms/wyndham-hotels-development-llms.txt
+  - path: /feed/
+    status: 500
+- host: https://corporate.wyndhamhotels.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+- host: https://investor.wyndhamhotels.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://mcp.wyndhamhotels.com
+  role: provisioned but unserved; recorded as an observation, not an API
+  documents:
+  - path: /.well-known/security.txt
+    status: 503
+  - path: /.well-known/openid-configuration
+    status: 503
+  - path: /.well-known/oauth-authorization-server
+    status: 503
+  - path: /.well-known/oauth-protected-resource
+    status: 503
+  - path: /.well-known/api-catalog
+    status: 503
+  - path: /.well-known/ai-plugin.json
+    status: 503
+  - path: /.well-known/mcp.json
+    status: 503
+  note: |
+    Re-probed 2026-07-28 including a JSON-RPC tools/list POST to /mcp. Every path
+    returns the same Akamai edgesuite error page. The host resolves and holds a
+    valid TLS certificate (expires 2026-12-10) but serves no content.
+- host: https://aisearch.wyndhamhotels.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/oauth-protected-resource
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  note: WAF returns 403 to scripted clients on every path, including the site root's
+    non-HTML paths.
+- host: https://connect.wyndhamhotels.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 204
+  - path: /.well-known/oauth-protected-resource
+    status: 204
+  - path: /.well-known/api-catalog
+    status: 204
+  note: Returns HTTP 204 with an empty body for every path, including paths that do
+    not exist. Not a discovery surface.
+security_txt:
+  exists: false
+  note: |
+    No RFC 9116 security.txt is published on any Wyndham host. The
+    probe-security-programs.py sweep returned no verified vulnerability-disclosure
+    program and no trust centre, so neither artifact was written and neither a
+    Security nor a Compliance pointer is emitted.
+cross_references:
+  authentication: authentication/wyndham-hotels-authentication.yml
+  scopes: scopes/wyndham-hotels-scopes.yml
+  mcp: mcp/wyndham-hotels-mcp.yml

@@ -1,0 +1,151 @@
+generated: '2026-07-28'
+method: searched
+source: |
+  live response headers and payloads from https://www.wyndhambusiness.com/wp-json/
+  and https://development.wyndhamhotels.com/wp-json/ observed 2026-07-28; upstream
+  semantics documented at https://developer.wordpress.org/rest-api/
+note: |
+  Wyndham Hotels & Resorts documents no API conventions of its own. Everything
+  recorded here was observed on live responses from the two anonymously reachable
+  WordPress REST surfaces on the estate, not assumed from WordPress defaults. These
+  are CMS conventions inherited from the platform, not a Wyndham interface contract —
+  which is exactly the finding: the only cross-cutting semantics Wyndham exposes are
+  ones it did not author and does not support.
+authentication:
+  style: none for public reads; OAuth 2.1 bearer for the MCP route; cookie +
+    X-WP-Nonce or application password for privileged routes
+  header: Authorization (advertised in access-control-allow-headers)
+  artifact: authentication/wyndham-hotels-authentication.yml
+idempotency:
+  supported: false
+  header: null
+  note: |
+    No idempotency key header, parameter or retry contract is documented or
+    exhibited on any Wyndham surface. Write methods are unavailable to anonymous
+    callers, so there is no idempotency surface at all. No Idempotency pointer is
+    emitted for this provider.
+pagination:
+  style: page-number
+  params:
+  - name: page
+    default: 1
+  - name: per_page
+    default: 10
+    min: 1
+    max: 100
+    enforced: true
+    evidence: per_page=999 returned HTTP 400 rest_invalid_param with detail code
+      rest_out_of_bounds
+  - name: offset
+  - name: search
+  - name: order
+  - name: orderby
+  response_headers:
+  - name: X-WP-Total
+    observed_value: '489'
+    observed_on: GET https://www.wyndhambusiness.com/wp-json/wp/v2/posts
+    description: total number of records in the collection
+  - name: X-WP-TotalPages
+    observed_value: '245'
+    description: total number of pages at the requested per_page
+  link_header:
+    supported: true
+    spec: RFC 8288
+    example: <https://www.wyndhambusiness.com/wp-json/wp/v2/posts?per_page=2&page=2>;
+      rel="next"
+field_selection:
+  supported: true
+  params:
+  - name: _fields
+    description: comma-separated list of top-level fields to return
+  - name: _embed
+    description: inline embedded resources referenced from _links
+  - name: context
+    values:
+    - view
+    - embed
+    - edit
+    description: response shape varies by context; edit requires authentication
+hypermedia:
+  supported: true
+  style: HAL-like _links object plus _embedded when _embed is requested
+  discovery:
+  - https://www.wyndhambusiness.com/wp-json/
+  - https://development.wyndhamhotels.com/wp-json/
+  link_header_advertised: <https://www.wyndhambusiness.com/wp-json/>; rel="https://api.w.org/"
+versioning:
+  scheme: uri-path namespace
+  current: wp/v2
+  namespaces_registered:
+    www.wyndhambusiness.com: 12
+    development.wyndhamhotels.com: 17
+  routes_registered:
+    www.wyndhambusiness.com: 309
+    development.wyndhamhotels.com: 403
+  provider_policy: none published by Wyndham; versioning follows upstream WordPress
+    core and plugin namespaces
+error_envelope:
+  format: wordpress-rest-error
+  rfc9457: false
+  artifact: errors/wyndham-hotels-problem-types.yml
+rate_limiting:
+  documented: false
+  signalling_headers: []
+  note: |
+    No RateLimit or X-RateLimit headers were returned on any probe. Cloudflare fronts
+    www.wyndhambusiness.com and may throttle abusive callers without advertising a
+    quota contract. The consumer estate (wyndhamhotels.com) is fronted by Akamai and
+    its Terms of Use prohibit automated access outright rather than rate-limiting it.
+caching:
+  cache_control: max-age=600, must-revalidate
+  cdn: WP Engine origin behind Cloudflare
+  note: JSON responses are edge-cached for ten minutes.
+cors:
+  allow_headers:
+  - Authorization
+  - X-WP-Nonce
+  - Content-Disposition
+  - Content-MD5
+  - Content-Type
+  expose_headers:
+  - X-WP-Total
+  - X-WP-TotalPages
+  - Link
+robots:
+  x_robots_tag: noindex
+  note: |
+    The JSON API responses are marked noindex, and www.wyndhamhotels.com/robots.txt
+    disallows /bin/ and /BWSServices/ (the internal booking web-service path) to all
+    agents except Bingbot. The Terms of Use additionally prohibit robots, spiders,
+    meta-searching and automated access to AI Search.
+content_types:
+  request: application/json
+  response: application/json; charset=UTF-8
+  feed: none (the WordPress /feed/ route returns HTTP 500 on both estates)
+schema_discovery:
+  supported: true
+  method: HTTP OPTIONS on any collection route returns a JSON Schema for the resource
+  captured:
+  - json-schema/wyndham-hotels-wp-v2-posts.json
+  - json-schema/wyndham-hotels-wp-v2-pages.json
+  - json-schema/wyndham-hotels-wp-v2-media.json
+  - json-schema/wyndham-hotels-wp-v2-categories.json
+  - json-schema/wyndham-hotels-wp-v2-tags.json
+  - json-schema/wyndham-hotels-wp-v2-users.json
+  - json-schema/wyndham-hotels-wp-v2-types.json
+  - json-schema/wyndham-hotels-wp-v2-taxonomies.json
+  - json-schema/wyndham-hotels-wp-v2-statuses.json
+  - json-schema/wyndham-hotels-wp-v2-comments.json
+  - json-schema/wyndham-hotels-wp-v2-search.json
+mcp_conventions:
+  transport: streamable HTTP JSON-RPC 2.0
+  accept: application/json, text/event-stream
+  authorization_challenge: |
+    401 with WWW-Authenticate: Bearer realm=..., resource_metadata=... per RFC 9728,
+    which is the MCP authorization handshake done correctly.
+  artifact: mcp/wyndham-hotels-mcp.yml
+cross_references:
+  errors: errors/wyndham-hotels-problem-types.yml
+  lifecycle: lifecycle/wyndham-hotels-lifecycle.yml
+  authentication: authentication/wyndham-hotels-authentication.yml
+  data_model: data-model/wyndham-hotels-data-model.yml
