@@ -1,0 +1,116 @@
+aid: wyndham-hotels
+name: Wyndham Hotels & Resorts
+kind: company
+description: >-
+  Wyndham Hotels & Resorts, Inc. (NYSE: WH) is the world's largest hotel
+  franchising company by number of properties, with over 8,300 affiliated
+  hotels and approximately 869,000 rooms across roughly 25 brands in 95+
+  countries, licensed to more than 6,200 franchisees. Headquartered in
+  Parsippany, New Jersey, its home market is the United States. Wyndham does
+  not operate most of its hotels — it franchises brands (Days Inn, Super 8,
+  Ramada, La Quinta, Microtel, Baymont, Howard Johnson, Travelodge, Wingate,
+  Wyndham, Wyndham Grand, Trademark Collection, TRYP, Dolce, ECHO Suites and
+  others) and sells the demand that flows through them. It sits in the
+  distribution chain as a franchisor and demand aggregator rather than as a
+  distribution platform: inventory reaches buyers through Wyndham's own
+  brand.com sites and Wyndham Rewards, through GDS chain codes under master
+  chain code WR, and through third-party online travel agents, with the
+  central reservation layer supplied by Sabre Hospitality's SynXis CRS under a
+  relationship Sabre publicly renewed in July 2024. Its API posture is honest
+  and thin: as of 2026-07-28 no developer portal, no API documentation, no
+  OpenAPI or other machine-readable contract, and no public API terms were
+  found on wyndhamhotels.com or any probed subdomain. developer., developers.,
+  docs. and api. subdomains do not resolve; /developers, /api, /docs,
+  /openapi.json, /swagger.json and /api-docs all return 404. An
+  mcp.wyndhamhotels.com host exists in certificate transparency and resolves
+  but returns an Akamai 503 with no served content and no documentation. The
+  published Terms of Use (effective 2026-03-12) affirmatively prohibit robots,
+  spiders, meta-searching and other automated access, and separately prohibit
+  automated access to Wyndham's AI Search. This is a no-public-API, no-exit-path
+  provider whose integration surface is reached only through a franchise
+  agreement, a commercial distribution agreement, or Sabre.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/wyndham-hotels.png
+url: https://raw.githubusercontent.com/api-evangelist/wyndham-hotels/refs/heads/main/apis.yml
+tags:
+  - Travel
+  - United States
+  - Hospitality
+  - Hotels
+  - Booking
+  - Franchising
+  - Distribution
+  - Loyalty
+  - GDS
+created: '2026-07-28'
+modified: '2026-07-28'
+specificationVersion: '0.19'
+apis: []
+common:
+  - type: Website
+    url: https://www.wyndhamhotels.com/
+  - type: CorporateWebsite
+    url: https://corporate.wyndhamhotels.com/
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/wyndhamhotels
+  - type: Wikipedia
+    url: https://en.wikipedia.org/wiki/Wyndham_Hotels_%26_Resorts
+  - type: TermsOfService
+    url: https://www.wyndhamhotels.com/about-us/terms-of-use-more-info
+  - type: PrivacyPolicy
+    url: https://www.wyndhamhotels.com/about-us/privacy-notice-more-info
+  - type: LLMSTxt
+    url: https://www.wyndhamhotels.com/llms.txt
+  - type: Robots
+    url: https://www.wyndhamhotels.com/robots.txt
+  - type: Sitemap
+    url: https://www.wyndhamhotels.com/sitemap.xml
+  - type: InvestorRelations
+    url: https://investor.wyndhamhotels.com/
+  - type: AnnualReport
+    name: Wyndham Hotels & Resorts FY2025 Form 10-K
+    url: https://www.sec.gov/Archives/edgar/data/1722684/000172268426000007/wh-20251231.htm
+    description: >-
+      SEC Form 10-K filed 2026-02-19. Source of the franchise-term, royalty and
+      distribution-channel language recorded in review.yml. Requires a declared
+      User-Agent; returns 403 to a generic browser UA.
+  - type: Franchising
+    name: Wyndham Hotel Development
+    url: https://development.wyndhamhotels.com/
+  - type: Suppliers
+    name: Wyndham Supplier Portal
+    url: https://wyndham.supplierone.co/
+    description: >-
+      suppliers.wyndham.com redirects here (third-party SupplierOne platform);
+      procurement onboarding, not an API surface.
+  - type: TravelProfessionals
+    name: Wyndham Hotel Travel Advisors Program
+    url: https://www.wyndhamhotels.com/content/whg-ecomm-responsive/en-us/whg/about-us/travel-professionals.html
+    description: >-
+      Travel-agent program; commission is earned by entering an IATA number on
+      the booking page. No GDS chain codes or connectivity docs published here.
+  - type: BusinessTravel
+    name: Wyndham Business
+    url: https://www.wyndhambusiness.com/
+    description: >-
+      Corporate travel program, including Wyndham Direct centralized booking
+      and billing. Approval-gated; no API or booking-tool integration published.
+  - type: Loyalty
+    name: Wyndham Rewards
+    url: https://www.wyndhamhotels.com/wyndham-rewards
+  - type: GitHubOrganization
+    url: https://github.com/Wyndham-Hotels-Resorts
+    description: >-
+      One public repository (next_gen_hotel_engagement, Python, created
+      2026-01-08). Loose analysis scripts, no SDK, no spec, no API client.
+  - type: Predecessor
+    name: Wyndham Worldwide
+    url: https://raw.githubusercontent.com/api-evangelist/wyndham-worldwide/refs/heads/main/apis.yml
+    description: >-
+      Wyndham Hotels & Resorts was spun off from Wyndham Worldwide on
+      2018-05-31; the remaining vacation-ownership business became
+      Travel + Leisure Co.
+  - type: Review
+    url: review.yml
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

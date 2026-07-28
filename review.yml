@@ -1,0 +1,485 @@
+aid: wyndham-hotels
+name: Wyndham Hotels & Resorts
+review:
+  question: >-
+    Does Wyndham Hotels & Resorts publish a public developer portal, API
+    documentation, or any machine-readable API contract — and what would it
+    cost a customer to leave?
+  answer: false
+  date: '2026-07-28'
+  reviewer: API Evangelist
+  tier: hotel-group
+  homeMarket: United States
+  primaryDomain: wyndhamhotels.com
+
+findings:
+  summary: |
+    No public API surface of any kind was found for Wyndham Hotels & Resorts
+    on 2026-07-28. There is no developer portal, no API reference, no OpenAPI
+    or Swagger document, no Postman collection, no SDK, no API terms of
+    service, and no partner connectivity documentation reachable without a
+    commercial relationship. The developer., developers., docs. and api.
+    subdomains of wyndhamhotels.com do not resolve at all. Every conventional
+    documentation path on the main site returns 404.
+
+    Wyndham is a franchisor, not a distribution platform. Its central
+    reservation system is Sabre Hospitality's SynXis CRS — Sabre publicly
+    announced a long-term renewal on 2024-07-31 covering roughly 9,100 hotels
+    and "nearly 70 million transactions annually", and reported migrating over
+    5,000 properties to SynXis Property Hub. The consequence for API
+    Evangelist purposes is that the programmable interface to Wyndham
+    inventory is Sabre's, not Wyndham's. A partner integrates with Sabre (or
+    with an OTA, or with the GDS chain codes) and never with a Wyndham API.
+
+    The one machine-readable-ish artifact Wyndham does publish for automated
+    consumers is an llms.txt at https://www.wyndhamhotels.com/llms.txt (HTTP
+    200, 313 lines). It is a marketing/brand-orientation document — brand
+    portfolio, loyalty tiers, booking guidance — and contains zero references
+    to APIs, developers, partners, distribution, GDS, Sabre or channel
+    connectivity. It is an AI-guidance document, not a contract.
+
+    Wyndham's published Terms of Use go further than silence: they
+    affirmatively prohibit automated access. This is the clearest statement of
+    posture available and is quoted verbatim below.
+
+  publicDeveloperSurface: false
+  openapiHarvested: false
+  specsCount: 0
+  apisListed: 0
+
+probes:
+  - url: https://www.wyndhamhotels.com/
+    status: 200
+    note: Consumer booking site.
+  - url: https://corporate.wyndhamhotels.com/
+    status: 200
+    note: Corporate site. Navigation exposes development, suppliers, investor, careers. No developer or API section.
+  - url: https://developer.wyndhamhotels.com/
+    status: 0
+    note: DNS does not resolve.
+  - url: https://developers.wyndhamhotels.com/
+    status: 0
+    note: DNS does not resolve.
+  - url: https://docs.wyndhamhotels.com/
+    status: 0
+    note: DNS does not resolve.
+  - url: https://api.wyndhamhotels.com/
+    status: 0
+    note: DNS does not resolve.
+  - url: https://www.wyndhamhotels.com/developers
+    status: 404
+  - url: https://www.wyndhamhotels.com/api
+    status: 404
+  - url: https://www.wyndhamhotels.com/docs
+    status: 404
+  - url: https://www.wyndhamhotels.com/openapi.json
+    status: 404
+  - url: https://www.wyndhamhotels.com/swagger.json
+    status: 404
+  - url: https://www.wyndhamhotels.com/api-docs
+    status: 404
+  - url: https://www.wyndhamhotels.com/.well-known/
+    status: 404
+  - url: https://www.wyndhamhotels.com/.well-known/security.txt
+    status: 404
+    note: No security.txt published.
+  - url: https://www.wyndhamhotels.com/sitemap_api
+    status: 404
+    note: Referenced in sitemap.xml but returns the site 404 page, not a sitemap.
+  - url: https://www.wyndhamhotels.com/llms.txt
+    status: 200
+    note: 313-line brand/marketing llms.txt. No API, developer, partner, GDS, Sabre, channel or distribution references.
+  - url: https://www.wyndhamhotels.com/robots.txt
+    status: 200
+    note: Disallows /bin/ and /BWSServices/ for all agents except Bingbot; allows Google-HotelAdsVerifier. BWSServices is an internal booking web-service path, undocumented, and is deliberately NOT catalogued as an API.
+  - url: https://www.wyndhamhotels.com/sitemap.xml
+    status: 200
+  - url: https://www.wyndhamhotels.com/about-us/terms-of-use
+    status: 200
+    note: Redirects to /about-us/terms-of-use-more-info. Effective 2026-03-12.
+  - url: https://www.wyndhamhotels.com/about-us/privacy-notice
+    status: 200
+    note: Redirects to /about-us/privacy-notice-more-info. Effective 2026-07-20.
+  - url: https://mcp.wyndhamhotels.com/
+    status: 503
+    note: >-
+      Host exists in certificate transparency and resolves, but every path
+      (/, /mcp, /sse, /.well-known/oauth-protected-resource, /openapi.json)
+      returns an Akamai edgesuite error page. No MCP server is served and none
+      is documented. Recorded as an observation only; NOT catalogued as an API.
+  - url: https://mcp.wyndhamhotels.com/mcp
+    status: 503
+  - url: https://mcp.wyndhamhotels.com/.well-known/oauth-protected-resource
+    status: 503
+  - url: https://aisearch.wyndhamhotels.com/
+    status: 200
+    note: >-
+      "Discover destinations - Wyndham" SPA, meta robots noindex/nofollow. This
+      is the AI Search product the Terms of Use forbid accessing by automated
+      means. No documented API.
+  - url: https://devx.wyndhamhotels.com/
+    status: 403
+  - url: https://connect.wyndhamhotels.com/
+    status: 204
+    note: Returns HTTP 204 with no body. No content, no documentation.
+  - url: https://ratesupport.wyndhamhotels.com/
+    status: 200
+    note: WordPress "Wyndham Hotels & Resorts Rate Support" site, noindex/nofollow. Franchisee-facing rate support, not an API.
+  - url: https://development.wyndhamhotels.com/
+    status: 200
+    note: Franchise development site.
+  - url: https://suppliers.wyndham.com/
+    status: 200
+    note: Redirects to https://wyndham.supplierone.co/ (third-party SupplierOne procurement platform).
+  - url: https://www.wyndhambusiness.com/
+    status: 403
+    note: WAF blocks scripted clients (403 to curl); renders for browsers. No developer or API path exists under it.
+  - url: https://www.wyndhamhotels.com/about-us/travel-professionals
+    status: 403
+    note: Redirects to https://www.wyndhambusiness.com/companies-with-managed-travel/, WAF-blocked to scripted clients.
+  - url: https://www.wyndhamhotels.com/content/whg-ecomm-responsive/en-us/whg/about-us/travel-professionals.html
+    status: 200
+    note: Travel Advisors Program page. 10% commission via IATA number. No connectivity documentation.
+  - url: https://www.wyndhamhotels.com/content/dam/assets/common-authored/pdf/11547%20TMC%20Consortia%20Update%202019_v2_041119.pdf
+    status: 200
+    note: >-
+      Wyndham-published TMC/Consortia PDF. First-party evidence of GDS chain
+      codes and GDS-only rate distribution. Quoted below.
+  - url: https://api.github.com/orgs/Wyndham-Hotels-Resorts
+    status: 200
+    note: Org created 2024-09-10, 1 public repo, no description, no SDK, no spec.
+  - url: https://api.github.com/orgs/wyndham
+    status: 404
+  - url: https://api.github.com/orgs/wyndhamhotels
+    status: 404
+  - url: https://www.sec.gov/Archives/edgar/data/1722684/000172268426000007/wh-20251231.htm
+    status: 200
+    note: FY2025 Form 10-K, filed 2026-02-19. Fetched with a declared research User-Agent; a generic browser UA gets 403.
+
+subdomainEnumeration:
+  method: crt.sh certificate transparency query for %.wyndhamhotels.com
+  date: '2026-07-28'
+  note: >-
+    Roughly 90 names returned. No developer/developers/docs/api host appears.
+    Names of interest that were probed: mcp, mcp-fqa, mcp-prv, aisearch,
+    aisearch-fqa, aisearch-prv, devx, connect, data, harper, ratesupport,
+    login, okta, jira-prod, jira-sandbox. The dev*/fqa*/rqa*/preview* families
+    are internal non-production web tiers, not developer programs.
+
+switchingCost:
+
+  interfaceShape:
+    value: none-published
+    standardNamed: >-
+      No standard reference found. Wyndham publishes no OpenTravel/OTA, HTNG,
+      OpenAPI, or NDC conformance claim anywhere on its public web properties.
+      The only shared-industry interface in evidence is GDS chain-code
+      distribution, and Wyndham does not document it as a contract — it names
+      chain codes inside marketing PDFs aimed at travel agents.
+    evidence: >-
+      No developer portal, no API reference, no machine-readable contract at
+      any probed URL. The reservation contract that partners actually integrate
+      against belongs to Sabre Hospitality (SynXis CRS), not to Wyndham. A
+      partner therefore conforms to Sabre's interface shape, and Wyndham's own
+      interface shape is, from the outside, unobservable.
+
+  secondSource:
+    value: alternatives-with-migration
+    alternativesConsidered:
+      - >-
+        For a hotel owner (Wyndham's actual paying customer — 6,200+
+        franchisees): competing franchisors exist and are genuinely
+        substitutable at the brand level — Choice Hotels, Best Western,
+        G6 Hospitality, Sonesta, IHG, and simply going independent. But moving
+        is a capital project: reflagging means new signage, PIP renovation,
+        new PMS/CRS, new loyalty enrollment, and — per the 10-K — exiting a
+        contract that is "typically 10 to 20 years in length".
+      - >-
+        For a distributor or developer who wants Wyndham inventory
+        specifically: there is no second source for Wyndham's own rooms, but
+        there are multiple routes to them (Sabre SynXis and GDS chain codes,
+        Amadeus/Travelport chain codes, OTAs, brand.com). No single route is
+        exclusive, which is why this is not scored no-alternative.
+      - >-
+        For a guest: Wyndham Rewards points are non-portable, but hotel rooms
+        are the most substitutable product in travel.
+    note: >-
+      The honest reading is that the lock-in here is contractual and physical,
+      not technical. There is no API to be locked into. What binds a Wyndham
+      customer is a decade-plus franchise agreement, a Wyndham-installed
+      property management system, and a reflagging cost — not an interface.
+
+  exitPath:
+    value: export-on-request
+    operationCited: >-
+      No endpoint. The Privacy Notice (effective 2026-07-20) publishes a
+      data-portability right exercised by email, phone or postal mail only:
+      privacy@wyndham.com, 1-866-554-1236, or Wyndham Hotels & Resorts, Inc.,
+      22 Sylvan Way, Parsippany, New Jersey 07054, Attn: Legal Privacy.
+    verbatim:
+      - >-
+        "You may request to receive your Personal Information in a format that
+        allows you to send it to another company or to direct us to transfer it
+        directly to another company."
+      - >-
+        "you have the right to request a copy of specific pieces of personal
+        information or categories of personal information we collected about
+        you in the prior 12 months"
+      - >-
+        "You may contact us to request we delete your Personal Information. We
+        will assess your request and determine whether we may delete the
+        information if no exemption under law applies"
+    note: >-
+      This is a consumer personal-data right, not a business-data export. No
+      bulk export, dump, reporting-download or data-portability operation is
+      published for franchisees, distributors, or corporate travel accounts.
+      Wyndham Direct customers are given a "24/7 online client portal to review
+      all folio data" — review, not documented export. The right is real but
+      manual, human-mediated, scoped to personal information, and capped at a
+      12-month lookback for the copy right.
+
+  identifierPortability:
+    summary: >-
+      A mix of genuinely portable industry identifiers and non-portable
+      proprietary ones — the portable ones belong to the GDS and IATA, not to
+      Wyndham.
+    portable:
+      - >-
+        GDS chain codes. Wyndham's own TMC/Consortia PDF instructs agents to
+        "SEARCH IN THE GDS / CHAIN CODE: WG / MASTER CHAIN CODE: WR" for
+        Wingate by Wyndham. WR is the Wyndham master chain code and travels
+        across GDSs.
+      - >-
+        Per-brand two-letter chain codes as published in the Amadeus for
+        Developers data-collection reference (third-party, not
+        Wyndham-published): WY Wyndham Hotels, DI Days Inn, OZ Super 8, RA
+        Ramada, LQ La Quinta, MT Microtel, BU Baymont, HJ Howard Johnson, TL
+        Travelodge, WG Wingate, AW AmericInn, BH Hawthorn Suites, WT TRYP, DX
+        Dolce, TQ Trademark, FE Esplendor & Dazzler, VI Vienna House — all
+        carrying master chain WR.
+      - >-
+        IATA agency numbers. The Travel Advisors Program pays commission when
+        an agent enters an IATA number on the booking page; IATA, CLIA, TRUE or
+        ARC credentials are validated at check-in for agent rates.
+      - >-
+        GDS rate access codes for TMC/consortia negotiated rates.
+    nonPortable:
+      - Wyndham Rewards member numbers and point balances.
+      - >-
+        Wyndham Direct 10-digit corporate codes and Wyndham Direct IDs, issued
+        per approved company account.
+      - >-
+        Property-level identifiers inside Sabre SynXis, which belong to the
+        Sabre tenancy rather than to the hotel.
+    note: >-
+      No PNR record locator applies (that is an air construct). Nothing in the
+      portable set is a Wyndham-owned identifier — Wyndham's portability comes
+      entirely from riding shared GDS and IATA identifier spaces it did not
+      define.
+
+  contractualLockIn:
+    publishedSources:
+      - >-
+        Wyndham Hotels & Resorts FY2025 Form 10-K (filed 2026-02-19),
+        https://www.sec.gov/Archives/edgar/data/1722684/000172268426000007/wh-20251231.htm
+      - >-
+        Wyndham Hotels & Resorts Terms of Use, effective 2026-03-12,
+        https://www.wyndhamhotels.com/about-us/terms-of-use-more-info
+    verbatim:
+      - source: FY2025 Form 10-K
+        quote: >-
+          "We license our brands and associated trademarks to over 6,200
+          franchisees globally... Our franchise agreements are typically 10 to
+          20 years in length, providing significant visibility into future cash
+          flows. Under these agreements, our direct franchisees generally pay
+          us a royalty fee of approximately 5% of gross room revenue and a
+          marketing and reservation fee of 2% to 4% of gross room revenue."
+      - source: FY2025 Form 10-K
+        quote: >-
+          "the Company also capitalizes costs associated with the sale and
+          installation of property management systems to its franchisees, which
+          are amortized over the remaining non-cancellable period of the
+          franchise agreement"
+      - source: FY2025 Form 10-K
+        quote: >-
+          "intended to reimburse the Company for expenses associated with
+          operating an international, centralized reservation system,
+          e-commerce channels such as the Company's brand.com websites, as well
+          as access to third-party distribution channels, such as online travel
+          agents"
+      - source: Terms of Use (effective 2026-03-12)
+        quote: >-
+          "use any robot, spider, intelligent agent, meta-searching or other
+          automatic device, or manual process to search, monitor or copy the
+          Web Services' pages"
+        note: Enumerated among the prohibited uses.
+      - source: Terms of Use (effective 2026-03-12)
+        quote: >-
+          "you agree not to...access or use AI Search through automated means
+          (including scraping, bots, crawlers, or similar tools)"
+      - source: Terms of Use (effective 2026-03-12)
+        quote: >-
+          "You may not deep link to any page or portion of the Web Services
+          without our prior written consent"
+      - source: Terms of Use (effective 2026-03-12)
+        quote: >-
+          "we reserve the right at any time and on any grounds, including
+          without limitation any reasonable belief of fraudulent or unlawful
+          activity, to deny or suspend your access"
+      - source: Terms of Use (effective 2026-03-12)
+        quote: >-
+          "These Terms terminate automatically if you fail to comply with any
+          provision hereof"
+    notPublished:
+      - >-
+        The Franchise Disclosure Document and the actual franchise agreement,
+        including liquidated-damages formulas and termination notice periods,
+        are not published on any Wyndham web property. Liquidated damages are
+        widely reported in litigation and franchise-law commentary but were not
+        verified from a Wyndham-published source and are therefore NOT recorded
+        here as fact.
+      - No API terms of service, developer agreement, or rate card exists to cite.
+      - No minimum-term, exclusivity, or full-content clause for distributors is published.
+    summary: >-
+      Verifiable and published: a 10-to-20-year franchise term, ~5% royalty
+      plus a 2-4% marketing and reservation fee on gross room revenue, a
+      Wyndham-installed PMS amortized over "the remaining non-cancellable
+      period of the franchise agreement", and a Terms of Use that bans
+      automated access outright and terminates automatically on breach.
+
+  distribution:
+    model: gds-intermediated
+    evidence:
+      - >-
+        Wyndham-published TMC/Consortia PDF: "SEARCH IN THE GDS / CHAIN CODE:
+        WG / MASTER CHAIN CODE: WR" and "Rate is bookable through the GDS
+        only."
+      - >-
+        FY2025 10-K describes fees funding "an international, centralized
+        reservation system, e-commerce channels such as the Company's brand.com
+        websites, as well as access to third-party distribution channels, such
+        as online travel agents".
+      - >-
+        Sabre Hospitality announced on 2024-07-31 a long-term renewal with
+        Wyndham covering the SynXis Central Reservation System across roughly
+        9,100 hotels and "nearly 70 million transactions annually", with over
+        5,000 properties migrated to SynXis Property Hub.
+    channels:
+      - Brand.com direct (wyndhamhotels.com) and the Wyndham mobile app
+      - Wyndham Rewards loyalty redemption
+      - GDS via chain codes under master chain WR (Sabre, Amadeus, Travelport)
+      - Online travel agents (third-party distribution channels, per the 10-K)
+      - Wyndham Business / Wyndham Direct for approved corporate accounts
+      - Travel Advisors Program bookings identified by IATA number
+    ndcPosture: >-
+      Not applicable. Wyndham is a hotel franchisor, not an airline. No IATA
+      NDC certification level is claimed, no NDC API is published, and NDC is
+      not referenced anywhere on Wyndham's public properties. The hotel-sector
+      analogue — a channel manager or CRS sitting between the property and the
+      OTA — is occupied here by Sabre SynXis, which Wyndham buys rather than
+      publishes.
+    note: >-
+      Wyndham is a demand aggregator that is itself a customer of the
+      intermediation layer. It does not publish the pipe; Sabre does. That
+      inversion is the finding.
+
+  accessGate:
+    value: none-published
+    whatADeveloperMustSign: >-
+      Nothing, because nothing is offered. There is no self-serve signup, no
+      application form, no partner portal login, no sandbox, and no published
+      route to request API access. The three real routes to Wyndham are: sign a
+      10-to-20-year franchise agreement to become a hotel owner; hold a Sabre
+      (or Amadeus/Travelport) GDS relationship and book against chain code WR;
+      or apply to Wyndham Business / Wyndham Direct, which requires an existing
+      Wyndham Business account, a submitted request with corporate code,
+      company name, website URL and anticipated travel spend, and explicit
+      approval before booking. A travel advisor needs an IATA (or CLIA, TRUE,
+      ARC) number to earn the published 10% commission. None of these produce
+      an API credential.
+    gated: true
+
+sources:
+  - url: https://www.wyndhamhotels.com/
+    type: Website
+    status: 200
+    fetched: '2026-07-28'
+  - url: https://www.wyndhamhotels.com/llms.txt
+    type: LLMSTxt
+    status: 200
+    fetched: '2026-07-28'
+    note: 313 lines, brand/loyalty guidance only; zero API, developer, partner, GDS, Sabre or distribution mentions.
+  - url: https://www.wyndhamhotels.com/robots.txt
+    type: Robots
+    status: 200
+    fetched: '2026-07-28'
+  - url: https://www.wyndhamhotels.com/about-us/terms-of-use-more-info
+    type: TermsOfService
+    status: 200
+    fetched: '2026-07-28'
+    note: Effective 2026-03-12. Source of the anti-automation and AI Search clauses.
+  - url: https://www.wyndhamhotels.com/about-us/privacy-notice-more-info
+    type: PrivacyPolicy
+    status: 200
+    fetched: '2026-07-28'
+    note: Effective 2026-07-20. Source of the data-portability, access and deletion language.
+  - url: https://www.sec.gov/Archives/edgar/data/1722684/000172268426000007/wh-20251231.htm
+    type: AnnualReport
+    status: 200
+    fetched: '2026-07-28'
+    note: FY2025 Form 10-K filed 2026-02-19. Franchise term, royalty, PMS and distribution-channel quotes.
+  - url: https://www.wyndhamhotels.com/content/dam/assets/common-authored/pdf/11547%20TMC%20Consortia%20Update%202019_v2_041119.pdf
+    type: Documentation
+    status: 200
+    fetched: '2026-07-28'
+    note: First-party GDS chain code evidence (chain code WG, master chain code WR, "bookable through the GDS only").
+  - url: https://www.wyndhamhotels.com/content/whg-ecomm-responsive/en-us/whg/about-us/travel-professionals.html
+    type: Documentation
+    status: 200
+    fetched: '2026-07-28'
+    note: 10% commission via IATA number; IATA/CLIA/TRUE/ARC validated at check-in.
+  - url: https://www.wyndhambusiness.com/wyndham-direct
+    type: Documentation
+    status: 403
+    fetched: '2026-07-28'
+    note: WAF blocks scripted clients; read via browser rendering. Approval-gated centralized booking and billing, 10-digit corporate code, no API.
+  - url: https://www.stocktitan.net/news/WH/sabre-hospitality-extends-long-term-relationship-with-wyndham-hotels-au5r9wnw8lbl.html
+    type: Press
+    status: 200
+    fetched: '2026-07-28'
+    note: Sabre Hospitality / Wyndham SynXis CRS renewal announced 2024-07-31.
+  - url: https://raw.githubusercontent.com/amadeus4dev/data-collection/master/data/hotelchains.md
+    type: Reference
+    status: 200
+    fetched: '2026-07-28'
+    note: >-
+      Third-party (Amadeus for Developers) hotel chain code reference. Used only
+      for the per-brand chain codes recorded under identifierPortability, and
+      explicitly flagged as not Wyndham-published.
+  - url: https://github.com/Wyndham-Hotels-Resorts
+    type: GitHubOrganization
+    status: 200
+    fetched: '2026-07-28'
+    note: One public Python repo, no SDK or spec.
+
+actions:
+  openapiDirectoryCreated: false
+  reason: >-
+    No OpenAPI, Swagger, AsyncAPI, GraphQL schema, Postman collection or any
+    other machine-readable API contract was found at any probed URL. Nothing
+    real was harvested, so no openapi/ directory was created. Per the
+    no-fabrication rule, no spec was generated, inferred, or reconstructed from
+    documentation.
+  apisYmlApisEmpty: true
+  apisYmlReason: >-
+    apis[] is intentionally empty. Wyndham Hotels & Resorts publishes no
+    documented API. Listing an entry here would require inventing a host,
+    endpoint or contract that does not exist publicly.
+  recheckTriggers:
+    - >-
+      mcp.wyndhamhotels.com begins serving content — the host is provisioned
+      behind Akamai and would be the first machine-facing surface Wyndham has
+      exposed.
+    - Any developer/developers/docs/api subdomain of wyndhamhotels.com begins to resolve.
+    - llms.txt gains an API, developer, or partner-connectivity section.
+    - Wyndham publishes GDS/connectivity documentation for distributors directly rather than via marketing PDFs.
