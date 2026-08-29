@@ -38,6 +38,17 @@ description: >-
   Wyndham issues to no third party, and none of it carries hotel data. The
   integration surface that matters is still reached only through a franchise
   agreement, a commercial distribution agreement, or Sabre.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/wyndham-hotels.png
 url: https://raw.githubusercontent.com/api-evangelist/wyndham-hotels/refs/heads/main/apis.yml
 tags:
