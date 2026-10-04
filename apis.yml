@@ -79,70 +79,34 @@ created: '2026-07-28'
 modified: '2026-07-28'
 specificationVersion: '0.23'
 apis:
-  - aid: wyndham-hotels:wyndham-business-wordpress-rest-api
-    name: Wyndham Business WordPress REST API
-    description: >-
-      www.wyndhambusiness.com — the Wyndham Business corporate-travel program
-      site — runs WordPress on WP Engine behind Cloudflare and leaves the
-      standard WordPress REST API anonymously readable at /wp-json/. The live
-      route-discovery document advertises 309 routes across 12 namespaces, and
-      anonymous HTTP 200 was verified on posts (489 records), pages, media,
-      categories, tags, users, types, taxonomies, statuses, comments, blocks and
-      search. HTTP OPTIONS on each collection returns a JSON Schema, eleven of
-      which are harvested into json-schema/. Page-number pagination with
-      X-WP-Total / X-WP-TotalPages and RFC 8288 Link headers; errors use the
-      WordPress {code,message,data.status} envelope rather than RFC 9457. This is
-      incidental CMS infrastructure, not a Wyndham API product — Wyndham
-      documents, supports and issues keys for nothing, and the surface carries no
-      property, rate, availability, reservation, loyalty or folio data. Settings
-      and the wp-abilities registry return 401.
-    humanURL: https://www.wyndhambusiness.com/
-    baseURL: https://www.wyndhambusiness.com/wp-json/wp/v2
+  - aid: wyndham-hotels:wyndhambusiness-com-website-wordpress-rest
+    name: Wyndham Hotels & Resorts Website (WordPress REST, www.wyndhambusiness.com)
+    description: 'The public WordPress REST API (wp-json) of the Wyndham Hotels & Resorts website at www.wyndhambusiness.com:
+      the route index of the site''s content management system, catalogued as one site surface rather than
+      as separate APIs.'
+    baseURL: https://www.wyndhambusiness.com/wp-json
     tags:
-      - Content
-      - WordPress
-      - REST
-      - JSON
-      - Business Travel
+    - WordPress
+    x-surface: platform-generated
     properties:
-      - type: Documentation
-        url: https://developer.wordpress.org/rest-api/
-      - type: APIReference
-        url: https://developer.wordpress.org/rest-api/reference/
-      - type: Discovery
-        url: https://www.wyndhambusiness.com/wp-json/
-      - type: DiscoveryDocument
-        url: discovery/wyndham-hotels-wyndhambusiness-wp-json-root.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-posts.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-pages.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-media.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-categories.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-tags.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-users.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-types.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-taxonomies.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-statuses.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-comments.json
-      - type: JSONSchema
-        url: json-schema/wyndham-hotels-wp-v2-search.json
-      - type: Conventions
-        url: conventions/wyndham-hotels-conventions.yml
-      - type: ErrorCatalog
-        url: errors/wyndham-hotels-problem-types.yml
-      - type: DataModel
-        url: data-model/wyndham-hotels-data-model.yml
-      - type: Authentication
-        url: authentication/wyndham-hotels-authentication.yml
+    - type: Documentation
+      url: https://www.wyndhambusiness.com/wp-json
+    x-platform: wordpress
+    x-platform-surface: rest
+  - aid: wyndham-hotels:development-wyndhamhotels-com-website-wordpress-rest
+    name: Wyndham Hotels & Resorts Website (WordPress REST, development.wyndhamhotels.com)
+    description: 'The public WordPress REST API (wp-json) of the Wyndham Hotels & Resorts website at development.wyndhamhotels.com:
+      the route index of the site''s content management system, catalogued as one site surface rather than
+      as separate APIs.'
+    baseURL: https://development.wyndhamhotels.com/wp-json
+    tags:
+    - WordPress
+    x-surface: platform-generated
+    properties:
+    - type: Documentation
+      url: https://development.wyndhamhotels.com/wp-json
+    x-platform: wordpress
+    x-platform-surface: rest
   - aid: wyndham-hotels:wyndham-business-mcp-server
     name: Wyndham Business WordPress MCP Server (OAuth-gated)
     description: >-
@@ -186,40 +150,9 @@ apis:
         url: scopes/wyndham-hotels-scopes.yml
       - type: WellKnown
         url: well-known/wyndham-hotels-well-known.yml
-  - aid: wyndham-hotels:development-wordpress-rest-api
-    name: Wyndham Hotel Development WordPress REST API
-    description: >-
-      development.wyndhamhotels.com — the franchise-development site — runs the
-      same WordPress/WP Engine stack and likewise leaves the WordPress REST API
-      anonymously readable at /wp-json/, advertising 403 routes across 17
-      namespaces including the WPML translation namespaces (wpml/v1, wpml/st/v1,
-      wpml/tm/v1, wpml/ate/v1). Anonymous HTTP 200 verified on posts, pages,
-      media, users and types. A second WordPress MCP adapter route is registered
-      here in the `mcp` namespace with no OAuth binding; JSON-RPC calls and the
-      wp-abilities registry both return 401, and /.well-known/oauth-authorization-server
-      returns 404. Incidental CMS infrastructure with franchise-marketing content
-      only — no franchise, property or development data model is exposed.
-    humanURL: https://development.wyndhamhotels.com/
-    baseURL: https://development.wyndhamhotels.com/wp-json/wp/v2
-    tags:
-      - Content
-      - WordPress
-      - REST
-      - JSON
-      - Franchising
-    properties:
-      - type: Documentation
-        url: https://developer.wordpress.org/rest-api/
-      - type: APIReference
-        url: https://developer.wordpress.org/rest-api/reference/
-      - type: Discovery
-        url: https://development.wyndhamhotels.com/wp-json/
-      - type: DiscoveryDocument
-        url: discovery/wyndham-hotels-development-wp-json-root.json
-      - type: Conventions
-        url: conventions/wyndham-hotels-conventions.yml
-      - type: ErrorCatalog
-        url: errors/wyndham-hotels-problem-types.yml
+    x-surface: platform-generated
+    x-platform: wordpress
+    x-platform-surface: mcp-plugin
 common:
   - type: DomainSecurity
     url: security/wyndham-hotels-domain-security.yml
