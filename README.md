@@ -1,4 +1,4 @@
-# Wyndham Hotels & Resorts (wyndham-hotels)
+# Wyndham Hotels & Resorts
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,76 +64,121 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Wyndham Hotels & Resorts, Inc. (NYSE: WH) is the world's largest hotel franchising company by number of properties, with over 8,300 affiliated hotels and approximately 869,000 rooms across roughly 25 brands in 95+ countries, licensed to more than 6,200 franchisees. Headquartered in Parsippany, New Jersey, its home market is the United States. Wyndham does not operate most of its hotels — it franchises brands (Days Inn, Super 8, Ramada, La Quinta, Microtel, Baymont, Howard Johnson, Travelodge, Wingate, Wyndham, Wyndham Grand, Trademark Collection, TRYP, Dolce, ECHO Suites and others) and sells the demand that flows through them. It sits in the distribution chain as a franchisor and demand aggregator rather than as a distribution platform: inventory reaches buyers through Wyndham's own brand.com sites and Wyndham Rewards, through GDS chain codes under master chain code WR, and through third-party online travel agents, with the central reservation layer supplied by Sabre Hospitality's SynXis CRS. Its API posture is thin and honest: as of 2026-07-28 there is no developer portal, no API documentation, no OpenAPI or other machine-readable contract, and no public API terms — and the published Terms of Use affirmatively prohibit robots, spiders, meta-searching and automated access to its AI Search.
+Wyndham Hotels & Resorts, Inc. (NYSE: WH) is the world's largest hotel franchising company by number of properties, with over 8,300 affiliated hotels and approximately 869,000 rooms across roughly 25 brands in 95+ countries, licensed to more than 6,200 franchisees. Headquartered in Parsippany, New Jersey, its home market is the United States. Wyndham does not operate most of its hotels — it franchises brands (Days Inn, Super 8, Ramada, La Quinta, Microtel, Baymont, Howard Johnson, Travelodge, Wingate, Wyndham, Wyndham Grand, Trademark Collection, TRYP, Dolce, ECHO Suites and others) and sells the demand that flows through them. It sits in the distribution chain as a franchisor and demand aggregator rather than as a distribution platform: inventory reaches buyers through Wyndham's own brand.com sites and Wyndham Rewards, through GDS chain codes under master chain code WR, and through third-party online travel agents, with the central reservation layer supplied by Sabre Hospitality's SynXis CRS under a relationship Sabre publicly renewed in July 2024. There is no travel API: no developer portal, no API documentation, no OpenAPI, and no property, rate, availability, reservation, loyalty or folio surface is machine-readable anywhere. developer., developers., docs. and api. subdomains do not resolve; /developers, /api, /docs, /openapi.json, /swagger.json and /api-docs all return 404, and mcp.wyndhamhotels.com resolves with a valid certificate but serves an Akamai 503 on every path. The Terms of Use (effective 2026-03-12) affirmatively prohibit robots, spiders, meta-searching and automated access, and separately prohibit automated access to Wyndham's AI Search. What a second enrichment round did find on 2026-07-28 is undocumented CMS infrastructure that is nonetheless genuinely live: www.wyndhambusiness.com and development.wyndhamhotels.com both run WordPress on WP Engine and leave the WordPress REST API anonymously readable (309 and 403 registered routes, with JSON Schema available by HTTP OPTIONS), and three WordPress MCP adapter routes are registered across the two estates — one of them, on www.wyndhambusiness.com, bound to a real OAuth 2.1 authorization server with RFC 8414 and RFC 9728 discovery metadata, mandatory PKCE S256 and a single `mcp` scope, returning a standards-correct 401 bearer challenge to anonymous callers. None of it is documented, supported, or usable without a credential Wyndham issues to no third party, and none of it carries hotel data. The integration surface that matters is still reached only through a franchise agreement, a commercial distribution agreement, or Sabre.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/wyndham-hotels/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/wyndham-hotels/refs/heads/main/apis.yml)
+**Areas:** Travel · United States · Hospitality · Hotels · Booking · Franchising · Distribution · Loyalty · GDS
 
-## Tags
+## Wyndham Hotels & Resorts on APIs.io
 
-- Travel
-- United States
-- Hospitality
-- Hotels
-- Booking
-- Franchising
-- Distribution
-- Loyalty
-- GDS
+Everything profiled for Wyndham Hotels & Resorts is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/wyndham-hotels/](https://apis.io/providers/wyndham-hotels/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (3)
 
-- **Created:** 2026-07-28
-- **Modified:** 2026-07-28
+- [Wyndham Hotels & Resorts Website (WordPress REST, www.wyndhambusiness.com)](https://apis.io/apis/wyndham-hotels/wyndhambusiness-com-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the Wyndham Hotels & Resorts website at www.wyndhambusiness.com: the route index of the site's content management…
+- [Wyndham Hotels & Resorts Website (WordPress REST, development.wyndhamhotels.com)](https://apis.io/apis/wyndham-hotels/development-wyndhamhotels-com-website-wordpress-rest/) — The public WordPress REST API (wp-json) of the Wyndham Hotels & Resorts website at development.wyndhamhotels.com: the route index of the site's content…
+- [Wyndham Business WordPress MCP Server (OAuth-gated)](https://apis.io/apis/wyndham-hotels/wyndham-business-mcp-server/) — A WordPress MCP adapter is registered on www.wyndhambusiness.com in the `mcp` namespace alongside wp-abilities/v1, and — unlike most WordPress MCP installs…
 
-## APIs
+### Published properties
 
-**No APIs are documented for Wyndham Hotels & Resorts** — but three undocumented, live machine-readable surfaces were found and are catalogued honestly:
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-- **Wyndham Business WordPress REST API** — `https://www.wyndhambusiness.com/wp-json/wp/v2` — anonymous, 309 registered routes across 12 namespaces, JSON Schema available by HTTP OPTIONS. Incidental CMS infrastructure, not a product.
-- **Wyndham Business WordPress MCP Server (OAuth-gated)** — `https://www.wyndhambusiness.com/wp-json/mcp/mcp-oauth-server` — a real OAuth 2.1 protected resource with RFC 8414 and RFC 9728 discovery metadata, PKCE S256 and a single `mcp` scope. Anonymous `tools/list` returns 401 with a standards-correct bearer challenge; no tool list is readable and no client registration path is published.
-- **Wyndham Hotel Development WordPress REST API** — `https://development.wyndhamhotels.com/wp-json/wp/v2` — anonymous, 403 routes across 17 namespaces, plus a third (non-OAuth) MCP adapter that returns 401.
+#### MCP servers (1)
 
-None of these carries hotel data. There is no property, rate, availability, reservation, loyalty or folio entity in any machine-readable Wyndham surface, and no OpenAPI, AsyncAPI, GraphQL, webhook or SDK anywhere.
+Model Context Protocol servers that expose the API to agents.
 
-The `developer.`, `developers.`, `docs.` and `api.` subdomains of `wyndhamhotels.com` do not resolve. `/developers`, `/api`, `/docs`, `/openapi.json`, `/swagger.json`, `/api-docs` and `/.well-known/` all return 404 on the consumer estate. An `mcp.wyndhamhotels.com` host exists in certificate transparency and resolves, but every path returns an Akamai 503 with no served content and no documentation — it is recorded as an observation in `review.yml`, not catalogued as an API.
+- [wyndham-hotels-mcp.yml](https://apis.io/servers/wyndham-hotels/wyndham-hotels-mcp-yml/)
 
-Wyndham's stated posture and its deployed posture disagree: the Terms of Use effective 2026-03-12 prohibit robots, spiders, intelligent agents and meta-searching outright, while three MCP adapters run on the estate.
+#### JSON Schema (11)
 
-The programmable interface to Wyndham inventory belongs to Sabre Hospitality, whose SynXis Central Reservation System Wyndham buys, not to Wyndham. See `review.yml` for the full probe log, the round-two correction, and the switching-cost analysis.
+The data models the API reads and writes.
 
-## Switching Cost
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-categories/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-comments/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-media/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-pages/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-posts/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-search/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-statuses/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-tags/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-taxonomies/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-types/)
+- [Moved to /providers/wyndham-hotels/](https://apis.io/schemas/wyndham-hotels/wyndham-hotels-wp-v2-users/)
 
-- **Interface shape:** `none-published` — no standard reference found; no OpenTravel/OTA, HTNG, OpenAPI or NDC conformance claim anywhere public.
-- **Second source:** `alternatives-with-migration` — for a franchisee, Choice, Best Western, G6, Sonesta, IHG and independence all exist, but exiting a "typically 10 to 20 years in length" franchise agreement plus reflagging is a capital project.
-- **Exit path:** `export-on-request` — the Privacy Notice publishes a real data-portability right, exercised by email, phone or mail only. No bulk export operation, no business-data export.
-- **Identifier portability:** GDS chain codes (master chain **WR**; e.g. **WG** Wingate) and IATA/ARC agency numbers travel; Wyndham Rewards member numbers and Wyndham Direct 10-digit corporate codes do not.
-- **Contractual lock-in:** 10-to-20-year franchise terms, ~5% royalty plus a 2-4% marketing and reservation fee on gross room revenue, a Wyndham-installed PMS amortized over "the remaining non-cancellable period of the franchise agreement", and a Terms of Use banning automated access that "terminate automatically if you fail to comply with any provision hereof".
-- **Distribution model:** `gds-intermediated` — Wyndham's own travel-agent material says a rate is "bookable through the GDS only".
-- **NDC posture:** Not applicable (hotel group, not an airline).
-- **Access gate:** `none-published` — nothing to sign up for, because nothing is offered.
+#### Security (2)
 
-## Common Properties
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Wyndham Hotels Authentication](https://apis.io/security/wyndham-hotels/wyndham-hotels-authentication/)
+- [Wyndham Hotels Domain Security](https://apis.io/security/wyndham-hotels/wyndham-hotels-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Wyndham Hotels Scopes](https://apis.io/scopes/wyndham-hotels/wyndham-hotels-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.wyndhamhotels.com/)
-- [Corporate Website](https://corporate.wyndhamhotels.com/)
-- [LinkedIn](https://www.linkedin.com/company/wyndhamhotels)
-- [Wikipedia](https://en.wikipedia.org/wiki/Wyndham_Hotels_%26_Resorts)
-- [Terms of Service](https://www.wyndhamhotels.com/about-us/terms-of-use-more-info)
-- [Privacy Policy](https://www.wyndhamhotels.com/about-us/privacy-notice-more-info)
-- [llms.txt](https://www.wyndhamhotels.com/llms.txt)
-- [robots.txt](https://www.wyndhamhotels.com/robots.txt)
-- [Sitemap](https://www.wyndhamhotels.com/sitemap.xml)
-- [Investor Relations](https://investor.wyndhamhotels.com/)
-- [FY2025 Form 10-K](https://www.sec.gov/Archives/edgar/data/1722684/000172268426000007/wh-20251231.htm)
-- [Wyndham Hotel Development (Franchising)](https://development.wyndhamhotels.com/)
-- [Wyndham Supplier Portal](https://wyndham.supplierone.co/)
-- [Wyndham Hotel Travel Advisors Program](https://www.wyndhamhotels.com/content/whg-ecomm-responsive/en-us/whg/about-us/travel-professionals.html)
-- [Wyndham Business](https://www.wyndhambusiness.com/)
-- [Wyndham Rewards](https://www.wyndhamhotels.com/wyndham-rewards)
-- [GitHub Organization](https://github.com/Wyndham-Hotels-Resorts)
-- [Predecessor: Wyndham Worldwide](https://raw.githubusercontent.com/api-evangelist/wyndham-worldwide/refs/heads/main/apis.yml)
-- [Review](review.yml)
+- [Support](https://www.wyndhamhotels.com/contact-us)
+- [Blog](https://corporate.wyndhamhotels.com/news-media/)
+- [Terms of service](https://www.wyndhamhotels.com/about-us/terms-of-use-more-info)
+- [Privacy policy](https://www.wyndhamhotels.com/about-us/privacy-notice-more-info)
+- [GitHub](https://github.com/Wyndham-Hotels-Resorts)
 
-## Maintainers
+## API Evangelist rating
 
-- Kin Lane — kin@apievangelist.com
+**Kin Score 20.9** — emerging · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 71.7 |
+| Contract quality | 0.0 |
+| Contract governance | 4.5 |
+| Operational transparency | 2.6 |
+| Developer ergonomics | 28.6 |
+| Access clarity | 21.1 |
+
+**Agent readiness 22.3** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | platform (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 34.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/wyndham-hotels/](https://apis.io/providers/wyndham-hotels/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Wyndham Hotels & Resorts: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/wyndham-hotels/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
